@@ -44,6 +44,11 @@ export const fetchNotes = async (search: string, page: number): Promise<FetchNot
   };
 };
 
+export const fetchNoteById = async (id: number): Promise<Note> => {
+  const response: AxiosResponse<Note> = await axiosInstance.get(`/notes/${id}`);
+  return response.data;
+};
+
 export const createNote = async (note: CreateNoteTodo): Promise<Note> => {
   const response: AxiosResponse<Note> = await axiosInstance.post('/notes', note);
   return response.data;

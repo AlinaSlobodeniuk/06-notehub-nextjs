@@ -12,7 +12,7 @@ import { fetchNotes, FetchNotesResponse } from '../../lib/api';
 import Loader from '../../components/Loader/Loader';
 import Error from '../../components/Error/Error';
 
-export default function App() {
+export default function NotesClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
