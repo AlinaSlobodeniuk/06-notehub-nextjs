@@ -4,6 +4,10 @@ import { Note } from '../types/note';
 const BASE_URL = 'https://notehub-public.goit.study/api';
 const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
+if (!TOKEN) {
+  throw new Error('Environment variable NEXT_PUBLIC_NOTEHUB_TOKEN is missing.');
+}
+
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -28,18 +32,18 @@ export type CreateNoteTodo = {
   tag: Note['tag'];
 };
 
-export const fetchNotes = async (search: string, page: number): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (search: string, page: number, perPage: number = 12): Promise<FetchNotesResponse> => {
   const params: FetchNotesParams = {
     page,
-    perPage: 12,
+    perPage,
     search: search || undefined,
   };
   const response: AxiosResponse<FetchNotesResponse> = await axiosInstance.get('/notes', { params });
 
-  const notes = response.data.notes || [];
-  const totalPages = response.data.totalPages;
+  const notes = response.data.notes ?? [];
+  const totalPages = response.data.totalPages ?? 1;
   return {
-    notes, 
+    notes,
     totalPages: totalPages > 0 ? totalPages : 1,
   };
 };

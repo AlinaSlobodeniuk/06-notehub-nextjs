@@ -12,10 +12,16 @@ import { fetchNotes, FetchNotesResponse } from '../../lib/api';
 import Loader from '../../components/Loader/Loader';
 import Error from '../../components/Error/Error';
 
-export default function NotesClient() {
+interface NotesClientProps {
+  initialData: FetchNotesResponse;
+  initialPage: number;
+  initialSearch: string;
+}
+
+export default function NotesClient({ initialData, initialPage, initialSearch }: NotesClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(initialPage);
+  const [search, setSearch] = useState(initialSearch);
   const [debouncedSearch] = useDebounce(search, 400);
 
   const handleSearchChange = (newSearch: string) => {
@@ -27,6 +33,7 @@ export default function NotesClient() {
     queryKey: ['notes', debouncedSearch, page],
     queryFn: () => fetchNotes(debouncedSearch, page),
     placeholderData: keepPreviousData,
+    initialData: debouncedSearch === initialSearch && page === initialPage ? initialData : undefined,
   });
 
   return (
